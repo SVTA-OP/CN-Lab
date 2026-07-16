@@ -7,7 +7,11 @@ int main() {
     int sock;
     struct sockaddr_in addr;
     socklen_t len = sizeof(addr);
-    char buffer[1024];
+    char roll[64], buffer[300];
+
+    printf("Enter roll no: ");
+    fgets(roll, sizeof(roll), stdin);
+    roll[strcspn(roll, "\n")] = '\0'; // strip newline
 
     sock = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -15,12 +19,12 @@ int main() {
     addr.sin_port = htons(9001);
     inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
 
-    char *msg = "Hello from UDP client";
-    sendto(sock, msg, strlen(msg), 0, (struct sockaddr*)&addr, len);
+    sendto(sock, roll, strlen(roll), 0, (struct sockaddr*)&addr, len);
 
     int n = recvfrom(sock, buffer, sizeof(buffer) - 1, 0, NULL, NULL);
     buffer[n] = '\0';
-    printf("Server replied: %s\n", buffer);
+
+    printf("Server response: %s\n", buffer);
 
     close(sock);
     return 0;

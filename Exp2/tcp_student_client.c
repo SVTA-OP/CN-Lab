@@ -6,7 +6,11 @@
 int main() {
     int sock;
     struct sockaddr_in addr;
-    char buffer[1024];
+    char roll[64], buffer[300];
+
+    printf("Enter roll no: ");
+    fgets(roll, sizeof(roll), stdin);
+    roll[strcspn(roll, "\n")] = '\0'; // strip newline
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -16,12 +20,12 @@ int main() {
 
     connect(sock, (struct sockaddr*)&addr, sizeof(addr));
 
-    char *msg = "Hello from TCP client";
-    write(sock, msg, strlen(msg));
+    write(sock, roll, strlen(roll));
 
     int n = read(sock, buffer, sizeof(buffer) - 1);
     buffer[n] = '\0';
-    printf("Server replied: %s\n", buffer);
+
+    printf("Server response: %s\n", buffer);
 
     close(sock);
     return 0;
