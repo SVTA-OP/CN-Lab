@@ -2,3 +2,4 @@
 
 # Do not ignore directories so Git can search them
 !*/
+ns3
